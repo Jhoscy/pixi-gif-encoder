@@ -1,0 +1,31 @@
+{
+  "name": "learn-pixi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "parcel index.html -p 4201",
+    "build": "parcel build index.html",
+    "gif": "node createGIF.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@pixi/canvas-extract": "^6.2.1",
+    "@pixi/canvas-renderer": "^6.2.1",
+    "@pixi/constants": "^6.2.1",
+    "@pixi/core": "^6.2.1",
+    "@pixi/display": "^6.2.1",
+    "@pixi/math": "^6.2.1",
+    "@pixi/settings": "^6.2.1",
+    "@pixi/utils": "^6.2.1",
+    "canvas": "^2.9.0",
+    "gif-encoder-2": "^1.0.5",
+    "pixi.js": "^6.2.1"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5"
+  }
+}

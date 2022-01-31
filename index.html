@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>learn-pixi</title>
+
+</head>
+<body id="body"> 
+  <p id="dest">
+    <h1 style="color: blue"> 
+        Big Smile Genesis
+    </h1>
+    </p> 
+    
+    <button onclick="getBufferData()">
+        Download Image
+    </button>
+    <button onclick="downloadGIF(getBufferData())">
+      Download GIF
+    </button>
+    <button onclick="download(getBufferData())">
+      Download FAKE GIF
+    </button>
+    <!-- <script>
+      window.onload = function() {
+        console.log('DIO PORCO');
+        diocane();
+        sayHello();
+      }
+    </script> -->
+
+    <p class="scroll"> 
+        By clicking the download button 
+        will download a big SMILE GIF
+    </p>
+  <script type="text/javascript" src="./src/prova.js"></script>
+  <script type="text/javascript" src="./src/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script>
+    function download(buffer) {
+      const url = window.URL
+           .createObjectURL(new Blob([buffer]));
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.setAttribute('download', 'big_smile.gif');
+                  document.body.appendChild(link);
+                  link.click();
+    }
+  </script>
+  <script>
+    function downloadGIF(buffer) {
+      console.log('Download', buffer, buffer.length);
+      var byteArrays= [];
+      for (var offset = 0; offset < buffer.length; offset += 512) {
+        let sliceOfBuffer = buffer.slice(offset, offset + 512);
+        let byteArray = new Uint8Array(sliceOfBuffer);
+        byteArrays.push(byteArray);
+      }
+      var blob = new Blob(byteArrays, { type: "image/gif"});
+      saveAs(blob, "first_big_smile.gif");
+    }
+  </script>
+  <!-- <script> 
+    function download(){
+        axios({
+            url:'https://source.unsplash.com/random/500x500',
+            method:'GET',
+            responseType: 'blob'
+    })
+    .then((response) => {
+           const url = window.URL
+           .createObjectURL(new Blob([response.data]));
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.setAttribute('download', 'image.jpg');
+                  document.body.appendChild(link);
+                  link.click();
+    })
+  } 
+ </script> -->
+</body>
+</html>
