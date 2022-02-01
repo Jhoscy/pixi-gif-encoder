@@ -19,13 +19,9 @@ import {
 } from 'pixi.js';
 
 import { light_00 } from './assets/light_00.png';
-// const { light_00 } = require('./assets/light_00.png');
 import background from './assets/light_01.jpg';
-// const { background } = require('./assets/light_01.jpg');
 import light_03 from './assets/light_03.png';
-// const { light_03 } = require('./assets/light_03.png');
 import nft from './assets/nft6_png.png';
-// const { nft } = require('./assets/nft6_png.png');
 
 CanvasRenderer.registerPlugin('extract', CanvasExtract);
 
@@ -79,6 +75,13 @@ function setup() {
     light_03_sprite.anchor.set(0.5);
     container.addChild(light_03_sprite);
 
+    /** Transparent layer added for correct effect rotation (added height and width to container) */
+    const transparent_sprite = new Sprite();
+    transparent_sprite.height = app.stage.height + 700;
+    transparent_sprite.width = app.stage.width + 700;
+    transparent_sprite.anchor.set(0.5);
+    container.addChild(transparent_sprite);
+
     nft_texture = loader.resources["nft"].texture;
     const nft_sprite = new Sprite(nft_texture);
     nft_sprite.anchor.set(0.5);
@@ -108,11 +111,7 @@ function setup() {
 
     app.stage.addChild(help);
 
-    
-
-    // app.ticker.add((delta) => {})
-    // Transform canvas in 2d context with renderer
-    // const big_smile_canvas = app.renderer.plugins.extract.canvas(container).getContext('2d');
+    // app.ticker.add((delta) => animation())
 
     encoder = new GIFEncoder(app.stage.width, app.stage.height, 'neuquant', true);
     encoder.start();
@@ -121,8 +120,7 @@ function setup() {
     setTicker();
     animate(4000);
 
-
-
+    /** We know that this will never work, but we use it as a timer for rendering */
     setTimeout(() => {
         try {
             createGIF(encoder);
@@ -131,7 +129,7 @@ function setup() {
             encoder.finish();
             app.ticker.destroy();
         }
-    }, 50000);
+    }, 40000);
 
     function setTicker() {
         app.ticker.autoStart = false;
@@ -142,23 +140,8 @@ function setup() {
         if(app.ticker._head) {
             app.ticker.update(time);
             app.ticker.add(() => animation());
-            // const big_smile_canvas = app.renderer.plugins.extract.canvas(app.stage).getContext('2d');
-            // encoder.addFrame(big_smile_canvas);
             setTimeout(() => {
                 console.log('timeout');
-                //document.body.appendChild(app.renderer.plugins.extract.image(app.stage));
-                
-                // const big_smile_canvas = app.renderer.plugins.extract.canvas(app.stage).getContext('2d');
-                // encoder.addFrame(big_smile_canvas);
-                // const canvas = createCanvas(app.stage.width, app.stage.height);
-                // const ctx = canvas.getContext('2d');
-                // const image64 = app.renderer.plugins.extract.base64(app.stage);
-                // const buffer = Buffer.from(image64, 'base64');
-                // const image = new Image(); 
-                // image.src = buffer;
-                // console.log('buffer src', image.src);
-                // ctx.drawImage(image, 0, 0);
-                
                 requestAnimationFrame(animate);
             }, 1000);
         }
@@ -166,10 +149,7 @@ function setup() {
 
     function animation() {
         light_03_sprite.rotation += 0.01;
-
-        // nft_sprite.scale.x = 1 + Math.sin(count) * 0.04;
-        // nft_sprite.scale.y = 1 + Math.cos(count) * 0.04;
-
+        light_03_sprite.anchor.set(0.5, 0.5);
         count += 0.3;
 
         const { matrix } = filter;
@@ -180,26 +160,20 @@ function setup() {
         matrix[5] = Math.sin(count / 2);
         matrix[6] = Math.sin(count / 4);
 
-        const big_smile_canvas = app.renderer.plugins.extract.canvas(app.stage).getContext('2d');
-        
-        encoder.addFrame(big_smile_canvas);
+        const canvas = createCanvas(app.stage.width, app.stage.height);
+        const ctx = canvas.getContext('2d');
+        const big_smile_canvas = app.renderer.plugins.extract.canvas(app.stage);
+        ctx.drawImage(big_smile_canvas, 0, 0);
+        encoder.addFrame(ctx);
     }
-
-    /** Sezione di prova */
-    console.log(app.renderer.plugins.extract.canvas(app.stage).getContext('2d'));
-    console.log(app.renderer.plugins.extract.image(app.stage));
-    // console.log(custom_canvas.toDataURL());
-    console.log(app.renderer.plugins.extract.pixels(app.stage));
 }
 
 function createGIF(encoder) {
     const buffer = encoder.out.getData();
-
     fs.writeFile(path.join(__dirname, 'output', 'big_smile.gif'), buffer, error => {
         // gif drawn or error
         console.log(error);
     });
-    // encoder.finish();
 }
 
 window.getBufferData = function getBufferData() {
